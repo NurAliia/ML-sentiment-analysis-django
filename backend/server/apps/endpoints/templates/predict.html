@@ -1,0 +1,23 @@
+{% extends "wrapper.html" %}
+{% block content %}
+<script>
+    document.title = 'Определить тональность текста';
+</script>
+<div class="dictionary_search">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="main_text">
+            <h1 class="page_title">Sentiment analysis | Тональность</h1>
+            <textarea name="text" class="form_content" placeholder="Введите текст"></textarea>
+            <div class="form_content">
+               <button class="send_button" type="submit">Отправить ответ</button>
+            </div>
+        </div>
+    </form>
+    {% if response %}
+        <h3 class="result">
+            Результат
+        </h3>
+    {% endif %}
+</div>
+{% endblock %}

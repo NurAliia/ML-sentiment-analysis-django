@@ -21,6 +21,8 @@ from apps.endpoints.serializers import MLAlgorithmStatusSerializer
 from apps.endpoints.models import MLRequest
 from apps.endpoints.serializers import MLRequestSerializer
 
+from .forms import PredictForm
+
 class EndpointViewSet(
     mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
 ):
@@ -110,3 +112,35 @@ class PredictView(views.APIView):
         prediction["request_id"] = ml_request.id
 
         return Response(prediction)
+
+def predict(request):
+    """
+    Обрабатывает запрос на получение поисковой формы и поисковый запрос об ассоциативном словаре (статье) и метриках для подсчёта.
+    :param request: Запрос, содержащий значения заполненных полей поисковой формы.
+    :return: Страница с формой поиска и его результатами (если применимо).
+    """
+    if request.method == 'POST' and 'predict' in request.POST:
+        form = PredictForm(request.POST)
+        if form.is_valid():
+            key_to_search = form.cleaned_data['key']
+            query_type = form.cleaned_data['query_type']
+            query_result = {}
+            dict_type = ''
+            if query_type == 'article':
+                dict_type = 'backward' if form.cleaned_data['backward'] else 'forward'
+                metrics = form.cleaned_data['forward_metrics'] if dict_type == 'forward'\
+                    else form.cleaned_data['backward_metrics']
+                query_result = calculate_statistics(key_to_search, dict_type, metrics)
+            elif query_type == 'dict':
+                dict_type = 'backward' if form.cleaned_data['backward_dict'] else 'forward'
+                keys = form.cleaned_data['multiple_key']
+                query_result = compose_dict(keys, dict_type)
+            return render(request, 'predict.html', {
+                'isResult': True,
+                'form': form,
+                'query_result': query_result,
+                'type': dict_type,
+            })
+    else:
+        form = PredictForm()
+    return render(request, 'predict.html', {'form': form})
