@@ -144,3 +144,6 @@ def predict(request):
     else:
         form = PredictForm()
     return render(request, 'predict.html', {'form': form})
+
+def main(request):
+    return render(request, 'main.html')

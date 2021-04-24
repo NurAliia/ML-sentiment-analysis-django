@@ -7,6 +7,7 @@ from apps.endpoints.views import MLAlgorithmStatusViewSet
 from apps.endpoints.views import MLRequestViewSet
 from apps.endpoints.views import PredictView
 from apps.endpoints.views import predict
+from apps.endpoints.views import main
 
 router = DefaultRouter(trailing_slash=False)
 router.register(r"endpoints", EndpointViewSet, basename="endpoints")
@@ -19,5 +20,6 @@ urlpatterns = [
     url(
         r"^api/v1/(?P<endpoint_name>.+)/predict$", PredictView.as_view(), name="predict"
     ),
-    url(r"^predict/", predict, name="predict")
+    url(r"^predict", predict, name="predict"),
+    url(r"^main", main, name="main"),
 ]

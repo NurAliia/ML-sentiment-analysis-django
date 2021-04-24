@@ -1,4 +1,25 @@
+body {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 97vh;
+}
+
+arctile {
+  height: 100%;
+}
+
 textarea {
   width: 500px;
   height: 150px;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+}
+
+.description {
+  display: flex;
+  justify-content: center;
 }

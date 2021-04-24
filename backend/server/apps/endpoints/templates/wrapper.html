@@ -16,8 +16,21 @@
     </head>
 
     <body>
+        <header>
+            <button onclick="handleRedirect('Главная')">Главная</button>
+            <button onclick="handleRedirect('Анализ')">Анализ</button>
+        </header>
         {% block content %}
         {% endblock %}
+        <footer class="footer">SSU 2021. Battalova Nur Aliia</footer>
     </body>
-
+    <script>
+        const handleRedirect = (type) => {
+            if (type === 'Главная') {
+                window.location.replace('main')
+            } else if (type === 'Анализ') {
+                window.location.replace('predict')
+            }
+        }
+    </script>
 </html>
