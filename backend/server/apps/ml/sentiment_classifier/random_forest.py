@@ -19,6 +19,9 @@ class RandomForestClassifier:
             if col not in self.columns:
                 input_data = input_data.drop(col, 1)
 
+        if (len(input_data) == 1):
+            raise ValueError('Попробуйте ввести другой текст')
+
         for col in self.columns:
             if col not in input_data:
                 input_data[col] = 0
