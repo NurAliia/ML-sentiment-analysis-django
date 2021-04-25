@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-{% load staticfiles %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css"/>
 
 <html lang="ru">
 
@@ -11,18 +12,22 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
         <title>Sentiment Analyzer</title>
-
-        <link rel="stylesheet" href="{% static 'style.css' %}" type="text/css"/>
     </head>
 
     <body>
         <header>
-            <button onclick="handleRedirect('Главная')">Главная</button>
-            <button onclick="handleRedirect('Анализ')">Анализ</button>
+            <ul id="navbar">
+                <li>
+                    <a onclick="handleRedirect('Главная')">Главная</a>
+                </li>
+                <li>
+                    <a onclick="handleRedirect('Анализ')">Анализ</a>
+                </li>
+            </ul>
         </header>
         {% block content %}
         {% endblock %}
-        <footer class="footer">SSU 2021. Battalova Nur Aliia</footer>
+        <footer class="footer">&#169 SSU 2021. Battalova Nur Aliia</footer>
     </body>
     <script>
         const handleRedirect = (type) => {
