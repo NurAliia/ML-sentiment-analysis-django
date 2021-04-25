@@ -125,6 +125,7 @@ def predict(request):
         if form.is_valid():
             text = form.cleaned_data['text']
             object = dict(Counter(re.findall(r'\w+', text)))
+            # Increment alg_index after update algorithm
             alg_index = 0
 
             algs = MLAlgorithm.objects.filter(
