@@ -6,8 +6,8 @@ class RandomForestClassifier:
         path_to_artifacts = "../../research/"
         self.values_fill_missing = joblib.load(path_to_artifacts + "train_mode.joblib")
         self.model = joblib.load(path_to_artifacts + "random_forest.joblib")
-        df = pd.read_csv("../../data/data.csv");
-        self.columns = [c for c in df.columns if c != 'Sentiment']
+        df = pd.read_excel("../../data/data2020.xlsx");
+        self.columns = [c for c in df.columns if c != 'Текст' and c != 'Тональность']
 
     def preprocessing(self, input_data):
         # JSON to pandas DataFrame
