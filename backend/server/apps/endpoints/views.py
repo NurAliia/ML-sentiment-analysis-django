@@ -1,8 +1,9 @@
 import json
+import re
+from collections import Counter
 from numpy.random import rand
 from rest_framework import views, status
 from rest_framework.response import Response
-from apps.ml.registry import MLRegistry
 from server.wsgi import registry
 
 from django.shortcuts import render
@@ -119,31 +120,46 @@ def predict(request):
     :param request: Запрос, содержащий значения заполненных полей поисковой формы.
     :return: Страница с формой поиска и его результатами (если применимо).
     """
-    if request.method == 'POST' and 'predict' in request.POST:
+    if request.method == 'POST':
         form = PredictForm(request.POST)
         if form.is_valid():
-            key_to_search = form.cleaned_data['key']
-            query_type = form.cleaned_data['query_type']
-            query_result = {}
-            dict_type = ''
-            if query_type == 'article':
-                dict_type = 'backward' if form.cleaned_data['backward'] else 'forward'
-                metrics = form.cleaned_data['forward_metrics'] if dict_type == 'forward'\
-                    else form.cleaned_data['backward_metrics']
-                query_result = calculate_statistics(key_to_search, dict_type, metrics)
-            elif query_type == 'dict':
-                dict_type = 'backward' if form.cleaned_data['backward_dict'] else 'forward'
-                keys = form.cleaned_data['multiple_key']
-                query_result = compose_dict(keys, dict_type)
+            text = form.cleaned_data['text']
+            object = dict(Counter(re.findall(r'\w+', text)))
+            alg_index = 0
+
+            algs = MLAlgorithm.objects.filter(
+                parent_endpoint__name="sentiment_classifier",
+                status__status="production",
+                status__active=True
+            )
+
+            algorithm_object = registry.endpoints[algs[alg_index].id]
+
+            prediction = algorithm_object.compute_prediction(object)
+
+            label = prediction["label"] if "label" in prediction else "error"
+
+            ml_request = MLRequest(
+                input_data=json.dumps(object),
+                full_response=prediction,
+                response=label,
+                feedback="",
+                parent_mlalgorithm=algs[alg_index],
+            )
+            ml_request.save()
+
+            prediction["request_id"] = ml_request.id
+
             return render(request, 'predict.html', {
-                'isResult': True,
+                'response': True,
                 'form': form,
-                'query_result': query_result,
-                'type': dict_type,
+                'query_result': prediction
             })
-    else:
-        form = PredictForm()
-    return render(request, 'predict.html', {'form': form})
+        else:
+            form = PredictForm()
+        return render(request, 'predict.html', {'form': form})
+
+    return render(request, 'predict.html')
 
 def main(request):
     return render(request, 'main.html')

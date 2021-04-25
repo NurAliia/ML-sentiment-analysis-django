@@ -4,7 +4,7 @@
     document.title = 'Определить тональность текста';
 </script>
 <div class="dictionary_search">
-    <form method="POST" action="/predict">
+    <form method="POST" action="/predict/">
         {% csrf_token %}
         <div class="main_text">
             <h1 class="page_title">Sentiment analysis | Тональность</h1>
@@ -15,9 +15,36 @@
         </div>
     </form>
     {% if response %}
-        <h3 class="result">
+        <h1 class="result">
             Результат
-        </h3>
+        </h1>
+        {% if query_result.status == 'OK' %}
+            {% if query_result.probability == 0 %}
+                <article class="result">\
+                    <h3>Уровень тревожности автора текста - Низкий</h3>
+                    Низкая тревожность сигнализирует о том, что испытуемый нуждается в повышении чувства
+                    ответственности и осознании реальных мотивов собственной деятельности. Но иногда очень
+                    низкая тревожность является свидетельством активного вытеснения личностью высокой
+                    тревоги с целью показать себя в «лучшем свете».
+                </article>
+            {% elif query_result.probability == 1 %}
+                <arctile>
+                    <h3>Уровень тревожности автора текста - Умеренный</h3>
+                </arctile>
+            {% else %}
+                <arctile>
+                    <h3>Уровень тревожности автора текста - Высокий</h3>
+                    Высокая тревожность предполагает склонность к появлению состояния тревоги у человека в
+                    ситуациях оценки его компетентности. В этом случае следует снизить субъективность значимость
+                    ситуации и задач и перенести акцент на осмысление деятельности и формирование чувства
+                    уверенности в успехе.
+                </arctile>
+            {% endif %}
+        {% elif query_result.status == 'Error' %}
+            <div class="result-error">
+                {{ query_result.message }}
+            </div>
+        {% endif %}
     {% endif %}
 </div>
 {% endblock %}

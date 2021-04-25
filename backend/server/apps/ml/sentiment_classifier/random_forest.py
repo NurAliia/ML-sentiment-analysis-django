@@ -15,6 +15,10 @@ class RandomForestClassifier:
         # fill missing values
         input_data.fillna(self.values_fill_missing)
 
+        for col in input_data:
+            if col not in self.columns:
+                input_data = input_data.drop(col, 1)
+
         for col in self.columns:
             if col not in input_data:
                 input_data[col] = 0
@@ -26,7 +30,6 @@ class RandomForestClassifier:
 
     def postprocessing(self, input_data):
         label = "low"
-        print(input_data)
         if input_data[0] == 1:
             label = "mid"
         elif input_data[0] == 2:
