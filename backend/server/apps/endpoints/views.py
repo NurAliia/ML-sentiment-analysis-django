@@ -126,13 +126,17 @@ def predict(request):
             text = form.cleaned_data['text']
             object = dict(Counter(re.findall(r'\w+', text)))
             # Increment alg_index after update algorithm
-            alg_index = 0
+            alg_index = 5
 
             algs = MLAlgorithm.objects.filter(
                 parent_endpoint__name="sentiment_classifier",
                 status__status="production",
                 status__active=True
             )
+
+            # For check index
+            # print(algs)
+            # print(registry.endpoints)
 
             algorithm_object = registry.endpoints[algs[alg_index].id]
 
