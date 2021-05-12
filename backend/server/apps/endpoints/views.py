@@ -150,7 +150,8 @@ def predict(request):
         form = PredictForm(request.POST)
         if form.is_valid():
             text = form.cleaned_data['text']
-            object = Counter(re.findall(r'\w+', text))
+            lemmatizeText = preprocess_text(text);
+            object = dict(Counter(re.findall(r'\w+', lemmatizeText)))
             # Increment alg_index after update algorithm
             alg_index = 5
 
