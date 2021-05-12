@@ -89,3 +89,8 @@ footer {
 .result-error {
   color: #FF4500;
 }
+
+.main_text .hint {
+  display: inline-flex;
+  margin: 10px;
+}
