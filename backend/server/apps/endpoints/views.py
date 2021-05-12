@@ -2,6 +2,11 @@ import json
 import re
 from collections import Counter
 from numpy.random import rand
+import nltk # nltk - to get russian stopwords
+nltk.download("stopwords")
+from nltk.corpus import stopwords # download stopwords corpus, you need to run it once
+from pymystem3 import Mystem # * pymystem3 - for lemmatization
+from string import punctuation
 from rest_framework import views, status
 from rest_framework.response import Response
 from server.wsgi import registry
@@ -23,6 +28,8 @@ from apps.endpoints.models import MLRequest
 from apps.endpoints.serializers import MLRequestSerializer
 
 from .forms import PredictForm
+
+# stopWords = open("../../stop_words.txt", 'r').read();
 
 class EndpointViewSet(
     mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
@@ -113,6 +120,25 @@ class PredictView(views.APIView):
         prediction["request_id"] = ml_request.id
 
         return Response(prediction)
+
+# Create lemmatizer and stopwords list
+mystem = Mystem()
+russian_stopwords = stopwords.words("russian")
+
+# Preprocess function
+def preprocess_text(text):
+    texts = text.split('\n');
+    lemmatize = '';
+    for item in texts:
+        tokens = mystem.lemmatize(item.lower())
+        tokens = [token for token in tokens if token not in russian_stopwords \
+                  and token not in [' ', ')', '(', ':', '.', ','] \
+                  # and token not in stopWords \
+                  and token.strip() not in punctuation]
+        lemmatize += " ".join(tokens)
+        lemmatize += '\n';
+
+    return lemmatize
 
 def predict(request):
     """
