@@ -19,8 +19,8 @@ class RandomForestClassifier:
             if col not in self.columns:
                 input_data = input_data.drop(col, 1)
 
-        if (len(input_data) == 1):
-            raise ValueError('Попробуйте ввести другой текст')
+        if (input_data.shape[1] <= 1):
+            raise ValueError('Данный текст не подходят для анализа тональности текста')
 
         for col in self.columns:
             if col not in input_data:
