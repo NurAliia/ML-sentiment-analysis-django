@@ -4,7 +4,7 @@ from sklearn.ensemble import RandomForestClassifier # for training the algorithm
 import joblib # for saving algorithm and preprocessing objects
 
 # Read data from xlsx file and fill "nan" data to "0"
-df = pd.read_excel('../data/data2020.xlsx').fillna(0);
+df = pd.read_excel('https://raw.githubusercontent.com/NurAliia/ML-sentiment-analysis/dev/data/data2020.xlsx').fillna(0);
 
 # X – features, Y – highlighted feature, result
 X = df.drop((['Текст', 'Тональность']), axis=1)
