@@ -28,7 +28,7 @@
             Результат
         </h1>
         {% if query_result.status == 'OK' %}
-            {% if query_result.probability == 0 %}
+            {% if query_result.label == 'low' %}
                 <article class="result">
                     <h3>Уровень тревожности автора текста - Низкий</h3>
                     Низкая тревожность сигнализирует о том, что испытуемый нуждается в повышении чувства
@@ -36,7 +36,7 @@
                     низкая тревожность является свидетельством активного вытеснения личностью высокой
                     тревоги с целью показать себя в «лучшем свете».
                 </article>
-            {% elif query_result.probability == 1 %}
+            {% elif query_result.label == 'mid' %}
                 <arctile class="result">
                     <h3>Уровень тревожности автора текста - Умеренный</h3>
                 </arctile>

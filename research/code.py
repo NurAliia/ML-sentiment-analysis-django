@@ -1,10 +1,11 @@
+# Run this code in jupyter for creating joblib
 import pandas as pd # for data manipulation
 from sklearn.model_selection import train_test_split # will be used for data split
 from sklearn.ensemble import RandomForestClassifier # for training the algorithm
 import joblib # for saving algorithm and preprocessing objects
 
 # Read data from xlsx file and fill "nan" data to "0"
-df = pd.read_csv('https://github.com/NurAliia/ML-sentiment-analysis-django/blob/dev/data/data2020.csv').fillna(0);
+df = pd.read_csv('https://raw.githubusercontent.com/NurAliia/ML-sentiment-analysis-django/dev/data/data2020.csv').fillna(0);
 
 # X – features, Y – highlighted feature, result
 X = df.drop((['Текст', 'Тональность']), axis=1)

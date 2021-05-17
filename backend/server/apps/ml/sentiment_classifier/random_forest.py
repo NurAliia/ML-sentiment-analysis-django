@@ -33,9 +33,9 @@ class RandomForestClassifier:
 
     def postprocessing(self, input_data):
         label = "low"
-        if input_data[0] == 1:
+        if input_data[0] > 0.34 and input_data[0] < 0.66:
             label = "mid"
-        elif input_data[0] == 2:
+        elif input_data[0] > 0.67:
             label = 'high'
         return {"probability": input_data[0], "label": label, "status": "OK"}
 

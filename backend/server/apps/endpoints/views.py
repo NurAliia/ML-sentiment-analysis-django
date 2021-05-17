@@ -3,7 +3,7 @@ import re
 from collections import Counter
 from numpy.random import rand
 import nltk # nltk - to get russian stopwords
-nltk.download("stopwords")
+# nltk.download("stopwords")
 from nltk.corpus import stopwords # download stopwords corpus, you need to run it once
 from pymystem3 import Mystem # * pymystem3 - for lemmatization
 from string import punctuation
